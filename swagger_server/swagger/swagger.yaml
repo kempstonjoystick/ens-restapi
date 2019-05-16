@@ -11,7 +11,7 @@ info:
     name: "ADVA"
     url: "https://www.advaoptical.com/en/about-us/legal/terms-of-use"
 host: "0.0.0.0"
-basePath: "/vse/api/v2.0/"
+basePath: "/vse/api/v2.0"
 tags:
 - name: "modem"
   description: "Modem related"
@@ -21,6 +21,70 @@ schemes:
 - "https"
 - "http"
 paths:
+  /config/{whichDB}/interfaces/gigabit/{gig}/:
+    get:
+      tags:
+      - "config"
+      summary: "Retrieve gigabit interface configuration"
+      description: "Retrieves the configuration attributes of one or more gigabit\
+        \ interfaces"
+      operationId: "config_which_db_interfaces_gigabit_gig_get"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "whichDB"
+        in: "path"
+        required: true
+        type: "string"
+        enum:
+        - "working"
+        - "active"
+      - name: "gig"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/gigInterfaceConfig"
+        404:
+          description: "Interface not found"
+          schema:
+            $ref: "#/definitions/stdResponse"
+      x-swagger-router-controller: "swagger_server.controllers.config_controller"
+    put:
+      tags:
+      - "config"
+      summary: "Create or Replace Gigabit interfaces"
+      description: "Define a gigabit interface.  Changes must be committed to take\
+        \ effect."
+      operationId: "config_which_db_interfaces_gigabit_gig_put"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "whichDB"
+        in: "path"
+        required: true
+        type: "string"
+        enum:
+        - "working"
+        - "active"
+      - name: "gig"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/gigInterfaceConfig"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/stdResponse"
+      x-swagger-router-controller: "swagger_server.controllers.config_controller"
   /modem:
     get:
       tags:
@@ -43,6 +107,46 @@ paths:
           description: "Invalid Input"
       x-swagger-router-controller: "swagger_server.controllers.modem_controller"
 definitions:
+  stdResponse:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+      message:
+        type: "string"
+      action:
+        type: "string"
+        enum:
+        - "PUT"
+        - "POST"
+        - "GET"
+        - "DELETE"
+    example:
+      action: "PUT"
+      message: "message"
+      status: 0
+  gigInterfaceConfig:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      alias:
+        type: "string"
+      admin:
+        type: "string"
+        enum:
+        - "up"
+        - "down"
+      firewall-profile:
+        type: "string"
+      ip-addr:
+        type: "string"
+    example:
+      ip-addr: "ip-addr"
+      firewall-profile: "firewall-profile"
+      name: "name"
+      alias: "alias"
+      admin: "up"
   LTEInterfaceProtoModemInfoHardware:
     type: "object"
     properties:
@@ -73,6 +177,15 @@ definitions:
       - "supported"
       - "supported"
       equipment_id: "equipment_id"
+parameters:
+  whichDB:
+    name: "whichDB"
+    in: "path"
+    required: true
+    type: "string"
+    enum:
+    - "working"
+    - "active"
 externalDocs:
   description: "Find out more about ADVA"
   url: "http://advaoptical.com"
