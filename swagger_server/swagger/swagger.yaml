@@ -1,0 +1,78 @@
+---
+swagger: "2.0"
+info:
+  description: "This is a Swagger generated API for Connector"
+  version: "2.0.0"
+  title: "ADVA Connector"
+  termsOfService: "https://www.advaoptical.com/en/about-us/legal/terms-of-use"
+  contact:
+    email: "info@advaoptical.com"
+  license:
+    name: "ADVA"
+    url: "https://www.advaoptical.com/en/about-us/legal/terms-of-use"
+host: "0.0.0.0"
+basePath: "/vse/api/v2.0/"
+tags:
+- name: "modem"
+  description: "Modem related"
+- name: "lte"
+  description: "LTE related"
+schemes:
+- "https"
+- "http"
+paths:
+  /modem:
+    get:
+      tags:
+      - "modem"
+      summary: "Returns all modems"
+      description: "Get the modem details"
+      operationId: "get_all_modems"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/LTEInterfaceProtoModemInfoHardware"
+        400:
+          description: "Invalid Input"
+      x-swagger-router-controller: "swagger_server.controllers.modem_controller"
+definitions:
+  LTEInterfaceProtoModemInfoHardware:
+    type: "object"
+    properties:
+      manufacturer:
+        type: "string"
+      model:
+        type: "string"
+      revision:
+        type: "string"
+      supported:
+        type: "array"
+        items:
+          type: "string"
+      current:
+        type: "array"
+        items:
+          type: "string"
+      equipment_id:
+        type: "string"
+    example:
+      current:
+      - "current"
+      - "current"
+      model: "model"
+      manufacturer: "manufacturer"
+      revision: "revision"
+      supported:
+      - "supported"
+      - "supported"
+      equipment_id: "equipment_id"
+externalDocs:
+  description: "Find out more about ADVA"
+  url: "http://advaoptical.com"
