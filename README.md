@@ -45,5 +45,9 @@ To run the server on a Docker container, please execute the following from the r
 docker build -t swagger_server .
 
 # starting up a container
-docker run -p 8080:8080 swagger_server
+docker run -v /usr/lib/python2.7/site-packages/ovnLib:/usr/src/app/ovnLib -v /root/ens-restapi/:/tmp/ens-restapi -p 10080:8080 swagger_server
+
+# Example modem query:
+curl -X GET "http://10.64.204.135:10080/vse/api/v2.0/modem" -H "accept: application/json"
+
 ```
