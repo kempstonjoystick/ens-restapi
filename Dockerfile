@@ -6,7 +6,6 @@ WORKDIR /usr/src/app
 RUN apk add --update alpine-sdk
 
 COPY requirements.txt /usr/src/app/
-
 RUN pip3 install --verbose --no-cache-dir -r requirements.txt
 
 COPY . /usr/src/app

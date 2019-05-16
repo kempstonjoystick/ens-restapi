@@ -17,12 +17,16 @@ def get_all_modems():  # noqa: E501
 
     :rtype: List[LTEInterfaceProtoModemInfoHardware]
     """
-    try:
-        with grpc.insecure_channel('10.64.204.135:35130') as channel:
-            stub = ModemHandlerStub(channel)
-            print("-------------- GetModems --------------")
-            req = GetModemReq()
-            result = stub.GetModems(req)
-            return result
-    except Exception as e:
-        return 404, e
+    #try:
+    with grpc.insecure_channel('10.64.204.135:35130') as channel:
+        stub = ModemHandlerStub(channel)
+        print("-------------- GetModems --------------")
+        req = GetModemReq()
+        results = stub.GetModems(req).modems
+        responses = []
+        for result in results:
+            responses.append(LTEInterfaceProtoModemInfoHardware(manufacturer=result.hardware.manufacturer, model=result.hardware.model, revision=result.hardware.revision, equipment_id=result.hardware.equipment_id))
+        return responses
+
+    #except Exception as e:
+    #    return e, 404
