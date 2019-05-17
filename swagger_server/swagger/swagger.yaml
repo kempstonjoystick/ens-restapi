@@ -47,11 +47,11 @@ paths:
         200:
           description: "Success"
           schema:
-            $ref: "#/definitions/gigInterfaceConfig"
+            $ref: "#/definitions/GigInterfaceConfig"
         404:
           description: "Interface not found"
           schema:
-            $ref: "#/definitions/stdResponse"
+            $ref: "#/definitions/StdResponse"
       x-swagger-router-controller: "swagger_server.controllers.config_controller"
     put:
       tags:
@@ -78,19 +78,19 @@ paths:
         name: "body"
         required: false
         schema:
-          $ref: "#/definitions/gigInterfaceConfig"
+          $ref: "#/definitions/GigInterfaceConfig"
       responses:
         200:
           description: "Success"
           schema:
-            $ref: "#/definitions/stdResponse"
+            $ref: "#/definitions/StdResponse"
       x-swagger-router-controller: "swagger_server.controllers.config_controller"
   /modem:
     get:
       tags:
       - "modem"
-      summary: "Returns all modems"
-      description: "Get the modem details"
+      summary: "Retrieve all discoverable modems"
+      description: "Retrieve the modem details for all discoverable modems"
       operationId: "get_all_modems"
       produces:
       - "application/xml"
@@ -103,15 +103,17 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/LTEInterfaceProtoModemInfoHardware"
-        400:
-          description: "Invalid Input"
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/StdResponse"
       x-swagger-router-controller: "swagger_server.controllers.modem_controller"
   /modem/{eqptId}:
     get:
       tags:
       - "modem"
-      summary: "Returns a single modem"
-      description: "Get the modem details for a single modem"
+      summary: "Retrieve a single modem"
+      description: "Retrieve the modem details for a single modem"
       operationId: "get_modem"
       produces:
       - "application/xml"
@@ -126,14 +128,22 @@ paths:
         200:
           description: "successful operation"
           schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/LTEInterfaceProtoModemInfoHardware"
+            $ref: "#/definitions/LTEInterfaceProtoModemInfoHardware"
         400:
-          description: "Invalid Input"
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/StdResponse"
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/StdResponse"
+        404:
+          description: "Modem not found"
+          schema:
+            $ref: "#/definitions/StdResponse"
       x-swagger-router-controller: "swagger_server.controllers.modem_controller"
 definitions:
-  stdResponse:
+  StdResponse:
     type: "object"
     properties:
       status:
@@ -151,7 +161,7 @@ definitions:
       action: "PUT"
       message: "message"
       status: 0
-  gigInterfaceConfig:
+  GigInterfaceConfig:
     type: "object"
     properties:
       name:
@@ -194,15 +204,15 @@ definitions:
         type: "string"
     example:
       current:
-      - "current"
-      - "current"
+      - "lte"
+      - "gsm-umts"
       model: "model"
       manufacturer: "manufacturer"
       revision: "revision"
       supported:
-      - "supported"
-      - "supported"
-      equipment_id: "equipment_id"
+      - "lte"
+      - "gsm-umts"
+      equipment_id: "123456789012345"
 parameters:
   whichDB:
     name: "whichDB"
