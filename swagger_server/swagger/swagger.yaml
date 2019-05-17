@@ -15,8 +15,8 @@ basePath: "/vse/api/v2.0"
 tags:
 - name: "modem"
   description: "Modem related"
-- name: "lte"
-  description: "LTE related"
+- name: "config"
+  description: "Config related"
 schemes:
 - "https"
 - "http"
@@ -96,6 +96,32 @@ paths:
       - "application/xml"
       - "application/json"
       parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/LTEInterfaceProtoModemInfoHardware"
+        400:
+          description: "Invalid Input"
+      x-swagger-router-controller: "swagger_server.controllers.modem_controller"
+  /modem/{eqptId}:
+    get:
+      tags:
+      - "modem"
+      summary: "Returns a single modem"
+      description: "Get the modem details for a single modem"
+      operationId: "get_modem"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "eqptId"
+        in: "path"
+        description: "Optional Equipment ID to only return a single modem"
+        required: true
+        type: "string"
       responses:
         200:
           description: "successful operation"
