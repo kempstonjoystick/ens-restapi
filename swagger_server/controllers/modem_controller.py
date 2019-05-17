@@ -35,7 +35,7 @@ def get_all_modems():  # noqa: E501
         return responses
     #except Exception as e:
     #    return e, 404
-    return StdResponse(status=403, message="Could not connect with GRPC channel", action="GET")
+    return StdResponse(status=403, message="Could not connect with GRPC channel", action="GET"), 403
 
 def get_modem(eqptId):  # noqa: E501
     """Returns a single modem
@@ -48,7 +48,7 @@ def get_modem(eqptId):  # noqa: E501
     :rtype: List[LTEInterfaceProtoModemInfoHardware]
     """
     if len(eqptId) != 15:
-        return StdResponse(status=400, message="Invalid Equipment ID", action="GET")
+        return StdResponse(status=400, message="Invalid Equipment ID", action="GET"), 400
     
     with grpc.insecure_channel('10.64.204.135:35130') as channel:
         stub = ModemHandlerStub(channel)
@@ -63,6 +63,6 @@ def get_modem(eqptId):  # noqa: E501
                 for supported_value in result.hardware.supported:
                     supported_resp.append(supported_value)
                 return LTEInterfaceProtoModemInfoHardware(manufacturer=result.hardware.manufacturer, model=result.hardware.model, revision=result.hardware.revision, equipment_id=result.hardware.equipment_id, supported=supported_resp, current=current_resp)
-        return StdResponse(status=404, message="Equipment ID does not exist", action="GET")
-    return StdResponse(status=403, message="Could not connect with GRPC channel", action="GET")
+        return StdResponse(status=404, message="Equipment ID does not exist", action="GET"), 404
+    return StdResponse(status=403, message="Could not connect with GRPC channel", action="GET"), 403
 
